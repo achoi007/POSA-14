@@ -212,48 +212,30 @@ public class SynchronizedQueue {
         try {
             mQueue = queue;
 
-<<<<<<< HEAD
-            // DONE - you fill in here to replace the null
-=======
             // Please make sure to keep all the "TODO" comments in the
             // code below to make it easy for peer reviewers to find
             // them.
 
             // TODO - you fill in here to replace the null
->>>>>>> 76d298347b6be37ea56e82b198c20162d2fbcf2f
             // initialization below to create two Java Threads, one
             // that's passed the producerRunnable and the other that's
             // passed the consumerRunnable.
-            Thread consumer = new Thread(consumerRunnable);
-            Thread producer = new Thread(producerRunnable);
+            Thread consumer = null;
+            Thread producer = null;
 
-            // DONE - you fill in here to start the threads. More
+            // TODO - you fill in here to start the threads. More
             // interesting results will occur if you start the
             // consumer first.
-<<<<<<< HEAD
-            consumer.start();
-            producer.start();
-
-=======
             
->>>>>>> 76d298347b6be37ea56e82b198c20162d2fbcf2f
             // Give the Threads a chance to run before interrupting
             // them.
             Thread.sleep(100);
 
-            // DONE - you fill in here to interrupt the threads.
-            consumer.interrupt();
-            producer.interrupt();
+            // TODO - you fill in here to interrupt the threads.
 
-            // DONE - you fill in here to wait for the threads to
+            // TODO - you fill in here to wait for the threads to
             // exit.
-<<<<<<< HEAD
-            consumer.join();
-            producer.join();
-
-=======
             
->>>>>>> 76d298347b6be37ea56e82b198c20162d2fbcf2f
             // Do some sanity checking to see if the Threads work as
             // expected.
             if (consumer == null 
