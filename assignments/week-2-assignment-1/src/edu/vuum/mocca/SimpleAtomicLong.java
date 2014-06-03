@@ -2,6 +2,7 @@ package edu.vuum.mocca;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
 
 /**
  * @class SimpleAtomicLong
@@ -23,14 +24,14 @@ class SimpleAtomicLong
 
     // TODO -- you fill in here by replacing the null with an
     // initialization of ReentrantReadWriteLock.
-    private ReentrantReadWriteLock mRWLock = null;
+    private ReentrantReadWriteLock mRWLock = new ReentrantReadWriteLock();
 
     /**
      * Creates a new SimpleAtomicLong with the given initial value.
      */
     public SimpleAtomicLong(long initialValue)
     {
-        // TODO -- you fill in here
+    	mValue = initialValue;
     }
 
     /**
@@ -40,11 +41,37 @@ class SimpleAtomicLong
      */
     public long get()
     {
-        long value;
-
-        // TODO -- you fill in here
-
-        return value;
+    	try {
+    		mRWLock.readLock().lock();
+    		long value = mValue;
+    		return value;
+    	}
+    	finally {
+    		mRWLock.readLock().unlock();
+    	}
+    }
+    
+    /**
+     * Helper function to change mValue within a write lock
+     * @param delta
+     * @return
+     */
+    private long changeValue(long delta, boolean returnValueAfterChange) {
+    	try {
+    		mRWLock.writeLock().lock();
+    		long oldValue = mValue;
+    		mValue += delta;
+    		if (returnValueAfterChange) {
+    			long newValue = mValue;
+    			return newValue;
+    		}
+    		else {
+    			return oldValue;
+    		}
+    	}
+    	finally {
+    		mRWLock.writeLock().unlock();
+    	}
     }
 
     /**
@@ -54,11 +81,7 @@ class SimpleAtomicLong
      */
     public long decrementAndGet()
     {
-        long value = 0;
-
-        // TODO -- you fill in here
-
-        return value;
+    	return changeValue(-1, true);
     }
 
     /**
@@ -68,11 +91,7 @@ class SimpleAtomicLong
      */
     public long getAndIncrement()
     {
-        long value = 0;
-
-        // TODO -- you fill in here
-
-        return value;
+    	return changeValue(1, false);
     }
 
     /**
@@ -82,11 +101,7 @@ class SimpleAtomicLong
      */
     public long getAndDecrement()
     {
-        long value = 0;
-
-        // TODO -- you fill in here
-
-        return value;
+    	return changeValue(-1, false);
     }
 
     /**
@@ -96,11 +111,7 @@ class SimpleAtomicLong
      */
     public long incrementAndGet()
     {
-        long value = 0;
-
-        // TODO -- you fill in here
-
-        return value;
+    	return changeValue(1, true);
     }
 }
 
