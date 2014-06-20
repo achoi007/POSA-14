@@ -66,7 +66,11 @@ public class AndroidPlatformStrategy extends PlatformStrategy
 				mTextViewOutput.setText(text);
 			}
 		};
-		mActivity.get().runOnUiThread(act);
+		
+		Activity activity = mActivity.get();
+		if (activity != null) {
+			activity.runOnUiThread(act);
+		}
     }
 
     /** Indicate that a game thread has finished running. */
