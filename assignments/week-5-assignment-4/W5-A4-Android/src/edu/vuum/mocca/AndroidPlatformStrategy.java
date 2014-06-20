@@ -62,7 +62,7 @@ public class AndroidPlatformStrategy extends PlatformStrategy
 			
 			@Override
 			public void run() {
-				String text = mTextViewOutput.getText() + outputString;
+				String text = mTextViewOutput.getText() + "\n" + outputString;
 				mTextViewOutput.setText(text);
 			}
 		};

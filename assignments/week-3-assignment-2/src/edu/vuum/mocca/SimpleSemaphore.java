@@ -33,7 +33,6 @@ public class SimpleSemaphore {
     // DONE - you fill in here.  Make sure that this data member will
     // ensure its values aren't cached by multiple Threads..
 	private volatile int mPermits;
-	private int mMaxPermits;
 
     public SimpleSemaphore(int permits, boolean fair) {
         // DONE - you fill in here to initialize the SimpleSemaphore,
@@ -41,7 +40,7 @@ public class SimpleSemaphore {
         // semantics.
     	mLock = new ReentrantLock(fair);
     	mNonEmpty = mLock.newCondition();
-    	mMaxPermits = mPermits = permits;
+    	mPermits = permits;
     }
 
     /**
@@ -49,8 +48,8 @@ public class SimpleSemaphore {
      * interrupted.
      */
     public void acquire() throws InterruptedException {
+		mLock.lock();
     	try {
-    		mLock.lock();
     		while (mPermits == 0) {
     			mNonEmpty.await();
     		}
@@ -69,8 +68,8 @@ public class SimpleSemaphore {
      * interrupted.
      */
     public void acquireUninterruptibly() {
+		mLock.lock();    	
     	try {
-    		mLock.lock();
     		while (mPermits == 0) {
     			mNonEmpty.awaitUninterruptibly();
     		}
@@ -85,13 +84,8 @@ public class SimpleSemaphore {
      * Return one permit to the semaphore.
      */
     void release() {
-    	
-    	if (mPermits == mMaxPermits) {
-			throw new IllegalStateException("Attempt to release more than " + mMaxPermits + " times");
-		}
-    	
+    	mLock.lock();    	
         try {
-        	mLock.lock();
         	++mPermits;
         	mNonEmpty.signalAll();
         }
@@ -104,8 +98,8 @@ public class SimpleSemaphore {
      * Return the number of permits available.
      */
     public int availablePermits() {
+		mLock.lock();    	
     	try {
-    		mLock.lock();
     		int permits = mPermits;
     		return permits;
     	}
