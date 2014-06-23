@@ -16,7 +16,7 @@ import java.util.concurrent.locks.Condition;
  */
 public class SimpleSemaphore {
     /**
-     * Define a ReentrantLock to protect the critical section.
+     * Define a Lock to protect the critical section.
      */
     // DONE - you fill in here
 	private ReentrantLock mLock;
@@ -83,6 +83,7 @@ public class SimpleSemaphore {
     /**
      * Return one permit to the semaphore.
      */
+<<<<<<< HEAD
     void release() {
     	mLock.lock();    	
         try {
@@ -92,6 +93,10 @@ public class SimpleSemaphore {
         finally {
         	mLock.unlock();
         }
+=======
+    public void release() {
+        // TODO - you fill in here.
+>>>>>>> upstream/master
     }
 
     /**
