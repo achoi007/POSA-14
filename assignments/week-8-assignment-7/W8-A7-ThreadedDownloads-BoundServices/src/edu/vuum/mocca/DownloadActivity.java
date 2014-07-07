@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * This is the main Activity that the program uses to start the
@@ -76,7 +77,7 @@ public class DownloadActivity extends DownloadBase {
                 // service parameter into an interface that can be
                 // used to make RPC calls to the Service.
 
-                mDownloadCall = null;
+                mDownloadCall = DownloadCall.Stub.asInterface(service);
             }
 
             /**
@@ -109,7 +110,7 @@ public class DownloadActivity extends DownloadBase {
                 // service parameter into an interface that can be
                 // used to make RPC calls to the Service.
 
-                mDownloadRequest = null;
+                mDownloadRequest = DownloadRequest.Stub.asInterface(service);
             }
 
             /**
@@ -145,7 +146,15 @@ public class DownloadActivity extends DownloadBase {
                 // sendPath().  Please use displayBitmap() defined in
                 // DownloadBase.
 
-                Runnable displayRunnable = null;
+                Runnable displayRunnable = new Runnable() {
+					
+					@Override
+					public void run() {
+						DownloadActivity.this.displayBitmap(imagePathname);
+					}
+				};
+				
+				DownloadActivity.this.runOnUiThread(displayRunnable);
             }
         };
      
@@ -157,18 +166,31 @@ public class DownloadActivity extends DownloadBase {
         Uri uri = Uri.parse(getUrlString());
 
         hideKeyboard();
+        
+        try {
 
-    	switch (view.getId()) {
-        case R.id.bound_sync_button:
-            // TODO - You fill in here to use mDownloadCall to
-            // download the image & then display it.
-            break;
-
-        case R.id.bound_async_button:
-            // TODO - You fill in here to call downloadImage() on
-            // mDownloadRequest, passing in the appropriate Uri and
-            // callback.
-            break;
+	    	switch (view.getId()) {
+	        case R.id.bound_sync_button:
+	            // TODO - You fill in here to use mDownloadCall to
+	            // download the image & then display it.
+	        	if (mDownloadCall != null) {
+	        		mDownloadCall.downloadImage(uri);
+	        	}
+	            break;
+	
+	        case R.id.bound_async_button:
+	            // TODO - You fill in here to call downloadImage() on
+	            // mDownloadRequest, passing in the appropriate Uri and
+	            // callback.
+	        	if (mDownloadRequest != null) {
+	        		mDownloadRequest.downloadImage(uri, mDownloadCallback);
+	        	}
+	            break;
+	        }
+        }
+        catch (RemoteException ex) {
+        	Log.e(TAG, ex.getMessage(), ex);
+        	Toast.makeText(this, ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
