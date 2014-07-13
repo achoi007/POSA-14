@@ -174,7 +174,8 @@ public class DownloadActivity extends DownloadBase {
 	            // TODO - You fill in here to use mDownloadCall to
 	            // download the image & then display it.
 	        	if (mDownloadCall != null) {
-	        		mDownloadCall.downloadImage(uri);
+	        		String path = mDownloadCall.downloadImage(uri);
+	        		mDownloadCallback.sendPath(path);
 	        	}
 	            break;
 	
